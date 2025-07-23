@@ -569,9 +569,10 @@
                     <option value="ASAPH">ASAPH</option>
                     <option value="Distrito-Anhembi">Distrito Anhembi</option>
                     <option value="Expo-Center-Norte">Expo-Center Norte</option>
+                    <option value="Frei Caneca">Frei Caneca</option>
                     <option value="Pro Magno">Pro Magno</option>
                     <option value="SP-EXPO">SP-EXPO</option>
-                    <option value="TRANSAMERICA">TRANSAMERICA</option>
+                    <option value="Transamerica">Transamerica</option>
                     <option value="Outro">Outro</option>
                 </select>
                 <input type="text" id="outroDestino" name="outroDestino" placeholder="Especifique outro destino" style="display: none; margin-top: 10px;">
@@ -763,15 +764,29 @@
                 const savedData = localStorage.getItem('asaphViagemData');
                 if (savedData) {
                     const data = JSON.parse(savedData);
-                    
                     // Preenche os campos salvos
                     if (data.nome) document.getElementById('nome').value = data.nome;
                     if (data.carro) document.getElementById('carro').value = data.carro;
-                    
+                    if (data.pneu) document.getElementById('pneu').value = data.pneu;
+                    if (data.cartao) document.getElementById('cartao').value = data.cartao;
+                    if (data.higiene) document.getElementById('higiene').value = data.higiene;
+                    if (data.carrinho) {
+                        // Seleciona o botão correto do carrinho
+                        const carrinhoBtns = document.querySelectorAll('#carrinhoBtnGroup .trip-btn');
+                        carrinhoBtns.forEach(btn => {
+                            if (btn.getAttribute('data-value') === data.carrinho) {
+                                btn.classList.add('active');
+                                btn.setAttribute('aria-pressed', 'true');
+                            } else {
+                                btn.classList.remove('active');
+                                btn.setAttribute('aria-pressed', 'false');
+                            }
+                        });
+                        document.getElementById('carrinho').value = data.carrinho;
+                    }
                     // Dispara eventos para atualizar campos dependentes
                     const carroEvent = new Event('change');
                     document.getElementById('carro').dispatchEvent(carroEvent);
-                    
                     // Foca no próximo campo a ser preenchido
                     document.getElementById('destino').focus();
                 }
@@ -1055,9 +1070,12 @@ ${modelo ? `*MODELO:* ${modelo}\n` : ''}*PLACA:* ${placa}
                     nome: nome,
                     carro: carro,
                     placa: placa,
-                    rodizio: rodizio
+                    rodizio: rodizio,
+                    pneu: form.pneu.value,
+                    cartao: form.cartao.value,
+                    higiene: form.higiene.value,
+                    carrinho: form.carrinho.value
                 };
-                
                 localStorage.setItem('asaphViagemData', JSON.stringify(dadosParaSalvar));
                 
                 alert('Registro salvo com sucesso!');
